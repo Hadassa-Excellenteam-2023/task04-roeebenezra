@@ -30,7 +30,7 @@ int main() {
             std::cout << "Search result:\n";
             std::cout << searchResult.size() << " city/cities found in the given radius.\n";
 
-            long countNorth = citySearch.countCitiesNorth(searchResult);
+            long countNorth = CitySearch::countCitiesNorth(searchResult, selectedCity);
             std::cout << countNorth << " cities are to the north of the selected city. City list:\n";
 
             for (const auto& city : searchResult) {

@@ -24,7 +24,7 @@ void CitySearch::loadCities(const std::string &fileName) {
                 throw std::runtime_error("Error reading y-coordinate for city: " + cityName);
             }
 
-            cities.insert({cityName, coordinates});
+            m_cities.insert({cityName, coordinates});
         }
     }
 
@@ -34,7 +34,7 @@ void CitySearch::loadCities(const std::string &fileName) {
 
 [[nodiscard]] std::multimap<std::string, Coordinates>
 CitySearch::findCities(const std::string &selectedCity, double radius, int norm) const {
-    auto range = cities.equal_range(selectedCity);
+    auto range = m_cities.equal_range(selectedCity);
     if (range.first == range.second) {
         throw std::runtime_error(
                 "ERROR: \"" + selectedCity + "\" isn't found in the city list. Please try again.");
@@ -63,7 +63,7 @@ CitySearch::findCities(const std::string &selectedCity, double radius, int norm)
     }
 
     const Coordinates &selectedCoords = range.first->second;
-    for (const auto &city: cities) {
+    for (const auto &city: m_cities) {
         const std::string &cityName = city.first;
         const Coordinates &coords = city.second;
         double distance = distanceFunc->second(coords, selectedCoords);
@@ -75,11 +75,12 @@ CitySearch::findCities(const std::string &selectedCity, double radius, int norm)
     return searchResult;
 }
 
-
-[[nodiscard]] long CitySearch::countCitiesNorth(const std::multimap<std::string, Coordinates>& cities) {
-    // Count the number of cities that are to the north of the selected city
-    double selectedY = range.first->second.y;
+// Count the number of cities to the north of the selected city
+[[nodiscard]] long
+CitySearch::countCitiesNorth(std::multimap<std::string, Coordinates> &cities, const std::string &selectedCity) {
+    auto range = cities.equal_range(selectedCity);
     return std::count_if(cities.begin(), cities.end(), [&](const auto &city) {
-        return city.second.y < selectedY;
+        return city.second.y < range.first->second.y;
     });
 }
+

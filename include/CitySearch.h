@@ -26,5 +26,5 @@ public:
     findCities(const std::string &selectedCity, double radius, int norm) const;
 
     // count cities to the north of the selected city
-    [[nodiscard]] static long countCitiesNorth(const std::multimap<std::string, Coordinates>&) ;
+    [[nodiscard]] static long countCitiesNorth(std::multimap<std::string, Coordinates> &, const std::string &);
 };
